@@ -37,6 +37,18 @@ function preprocess(expression: string) {
     .replace(/\batan\(/g, 'atan_angle(')
 }
 
+function findIdentifiers(expression: string) {
+  // Remove complete scientific-notation numbers before checking identifiers.
+  // This prevents values such as 6.022e23 from being mistaken for an
+  // identifier named "e23".
+  const withoutScientificNotation = expression.replace(
+    /(?:\d+(?:\.\d*)?|\.\d+)[eE][+-]?\d+/g,
+    '',
+  )
+
+  return withoutScientificNotation.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? []
+}
+
 export function evaluateExpression(input: string, mode: AngleMode): string {
   const expression = input.trim()
   if (!expression) return ''
@@ -54,7 +66,7 @@ export function evaluateExpression(input: string, mode: AngleMode): string {
     'factorial', 'combinations', 'permutations',
   ])
 
-  const identifiers = expr.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? []
+  const identifiers = findIdentifiers(expr)
 
   for (const identifier of identifiers) {
     if (!allowed.has(identifier)) {
