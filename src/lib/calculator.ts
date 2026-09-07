@@ -23,6 +23,7 @@ function preprocess(expression: string) {
     .replaceAll('÷', '/')
     .replaceAll('−', '-')
     .replaceAll('π', 'pi')
+    .replaceAll('⁄', '/')
     .replace(/(\d+(?:\.\d+)?)%/g, '($1/100)')
     .replace(/\blog\(/g, 'log10(')
     .replace(/\bsec\(/g, 'sec_angle(')
