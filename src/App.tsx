@@ -1,9 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
-  Backspace, Calculator, Check, Clock3, Copy, Delete, Eraser, History,
-  Keyboard, Moon, RotateCcw, Settings2, Sun, Trash2
+  Calculator,
+  Clock3,
+  Copy,
+  Delete,
+  History,
+  Keyboard,
+  Moon,
+  Settings2,
+  Sun,
+  Trash2,
 } from 'lucide-react'
-import { evaluateExpression, factorial, type AngleMode } from './lib/calculator'
+import { evaluateExpression, type AngleMode } from './lib/calculator'
 
 type HistoryItem = { id: number; expression: string; result: string }
 
@@ -17,6 +25,7 @@ const keyRows = [
   ['0', '.', 'π', 'e', ''],
 ]
 
+const primaryFunctions = ['sin', 'cos', 'tan', 'log', 'ln']
 const secondary = ['asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'floor', 'ceil', '!', '1/x', '10ˣ']
 
 function App() {
@@ -27,6 +36,7 @@ function App() {
   const [history, setHistory] = useState<HistoryItem[]>([])
   const [showHistory, setShowHistory] = useState(true)
   const [showAdvanced, setShowAdvanced] = useState(false)
+  const [secondFunction, setSecondFunction] = useState(false)
   const [dark, setDark] = useState(() => window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false)
   const [error, setError] = useState('')
 
@@ -75,9 +85,14 @@ function App() {
   useEffect(() => {
     const listener = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return
-      if (e.key === 'Enter') { e.preventDefault(); calculate(); return }
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        calculate()
+        return
+      }
       handleKey(e.key)
     }
+
     window.addEventListener('keydown', listener)
     return () => window.removeEventListener('keydown', listener)
   })
@@ -86,6 +101,7 @@ function App() {
     if (key === '=') return calculate()
     if (key === 'AC') return clear()
     if (key === '⌫') return backspace()
+    if (key === '2nd') return setSecondFunction(v => !v)
     if (key === '±') return setExpression(v => v.startsWith('-') ? v.slice(1) : `-(${v})`)
     if (key === 'π') return append('π')
     if (key === 'e') return append('e')
@@ -97,17 +113,31 @@ function App() {
     if (key === '−') return append('−')
     if (key === '%') return append('%')
     if (key === '!') return append('!')
-    if (key === '1/x') return setExpression(v => `1/(${v})`)
+    if (key === '1/x') return setExpression(v => `1/(${v || '0'})`)
     if (key === '10ˣ') return append('10^')
-    if (['sin', 'cos', 'tan', 'log', 'ln', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'floor', 'ceil'].includes(key)) return append(`${key}(`)
+
+    if (['sin', 'cos', 'tan', 'log', 'ln', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'floor', 'ceil'].includes(key)) {
+      return append(`${key}(`)
+    }
+
     append(key)
   }
 
-  const copyResult = async () => { await navigator.clipboard?.writeText(displayResult) }
+  const copyResult = async () => {
+    await navigator.clipboard?.writeText(displayResult)
+  }
 
   const memoryValue = () => {
-    try { return Number(evaluateExpression(expression || result, mode)) || 0 } catch { return 0 }
+    try {
+      return Number(evaluateExpression(expression || result, mode)) || 0
+    } catch {
+      return 0
+    }
   }
+
+  const visiblePrimaryFunctions = secondFunction
+    ? ['asin', 'acos', 'atan', 'sinh', 'cosh']
+    : primaryFunctions
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
@@ -149,8 +179,8 @@ function App() {
                 {displayResult}
               </div>
               <div className="mt-3 flex justify-end gap-1">
-                <button onClick={copyResult} className="rounded-md p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"><Copy size={15} /></button>
-                <button onClick={backspace} className="rounded-md p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"><Backspace size={15} /></button>
+                <button aria-label="Copy result" onClick={copyResult} className="rounded-md p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"><Copy size={15} /></button>
+                <button aria-label="Backspace" onClick={backspace} className="rounded-md p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"><Delete size={15} /></button>
               </div>
             </div>
 
@@ -171,9 +201,17 @@ function App() {
                 <button onClick={() => setShowAdvanced(v => !v)} className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-zinc-200 py-2 text-xs font-medium hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-800"><Settings2 size={14} /> {showAdvanced ? 'Hide functions' : 'More functions'}</button>
               </div>
 
-              {showAdvanced && <div className="mb-3 grid grid-cols-3 gap-2 sm:grid-cols-6">
-                {secondary.map(k => <button key={k} onClick={() => press(k)} className="rounded-xl border border-zinc-200 bg-white py-3 text-xs font-medium hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800">{k}</button>)}
-              </div>}
+              {showAdvanced && (
+                <div className="mb-3 grid grid-cols-3 gap-2 sm:grid-cols-6">
+                  {secondary.map(k => <button key={k} onClick={() => press(k)} className="rounded-xl border border-zinc-200 bg-white py-3 text-xs font-medium hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800">{k}</button>)}
+                </div>
+              )}
+
+              <div className="mb-2 grid grid-cols-6 gap-2">
+                {visiblePrimaryFunctions.map(key => (
+                  <button key={key} onClick={() => press(key)} className="rounded-xl border border-zinc-200 bg-white py-3 text-xs font-medium hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800">{key}</button>
+                ))}
+              </div>
 
               <div className="grid grid-cols-5 gap-2">
                 {keyRows.flat().map((key, i) => key === '' ? <div key={i} /> : (
@@ -198,7 +236,7 @@ function App() {
             <div className="flex items-center gap-2 text-sm font-semibold"><History size={16} /> History</div>
             <div className="flex gap-1">
               <button onClick={() => setHistory([])} aria-label="Clear history" className="rounded-md p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800"><Trash2 size={15} /></button>
-              <button onClick={() => setShowHistory(false)} className="rounded-md p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 lg:hidden"><Delete size={15} /></button>
+              <button onClick={() => setShowHistory(false)} aria-label="Hide history" className="rounded-md p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 lg:hidden"><Delete size={15} /></button>
             </div>
           </div>
           <div className="max-h-[620px] overflow-y-auto p-2">
@@ -216,7 +254,7 @@ function App() {
           </div>
         </aside>
 
-        {!showHistory && <button onClick={() => setShowHistory(true)} className="fixed bottom-5 right-5 rounded-full bg-zinc-950 p-3 text-white shadow-lg dark:bg-white dark:text-zinc-950 lg:hidden"><History size={19} /></button>}
+        {!showHistory && <button onClick={() => setShowHistory(true)} aria-label="Show history" className="fixed bottom-5 right-5 rounded-full bg-zinc-950 p-3 text-white shadow-lg dark:bg-white dark:text-zinc-950 lg:hidden"><History size={19} /></button>}
       </main>
 
       <footer className="border-t border-zinc-200 py-6 dark:border-zinc-800">

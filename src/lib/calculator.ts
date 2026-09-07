@@ -50,11 +50,10 @@ export function evaluateExpression(input: string, mode: AngleMode): string {
     'sinh', 'cosh', 'tanh',
     'asinh', 'acosh', 'atanh',
     'sqrt', 'abs', 'floor', 'ceil', 'exp',
-    'factorial', 'combinations', 'permutations'
+    'factorial', 'combinations', 'permutations',
   ])
 
-  const identifiers =
-    expr.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? []
+  const identifiers = expr.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? []
 
   for (const identifier of identifiers) {
     if (!allowed.has(identifier)) {
@@ -70,23 +69,13 @@ export function evaluateExpression(input: string, mode: AngleMode): string {
     cos_angle: (x: number) => Math.cos(toRadians(x, mode)),
     tan_angle: (x: number) => Math.tan(toRadians(x, mode)),
 
-    cot_angle: (x: number) =>
-      1 / Math.tan(toRadians(x, mode)),
+    cot_angle: (x: number) => 1 / Math.tan(toRadians(x, mode)),
+    sec_angle: (x: number) => 1 / Math.cos(toRadians(x, mode)),
+    csc_angle: (x: number) => 1 / Math.sin(toRadians(x, mode)),
 
-    sec_angle: (x: number) =>
-      1 / Math.cos(toRadians(x, mode)),
-
-    csc_angle: (x: number) =>
-      1 / Math.sin(toRadians(x, mode)),
-
-    asin_angle: (x: number) =>
-      fromRadians(Math.asin(x), mode),
-
-    acos_angle: (x: number) =>
-      fromRadians(Math.acos(x), mode),
-
-    atan_angle: (x: number) =>
-      fromRadians(Math.atan(x), mode),
+    asin_angle: (x: number) => fromRadians(Math.asin(x), mode),
+    acos_angle: (x: number) => fromRadians(Math.acos(x), mode),
+    atan_angle: (x: number) => fromRadians(Math.atan(x), mode),
 
     sinh: Math.sinh,
     cosh: Math.cosh,
@@ -101,11 +90,7 @@ export function evaluateExpression(input: string, mode: AngleMode): string {
   try {
     result = math.evaluate(expr, scope)
   } catch (error) {
-    throw new Error(
-      error instanceof Error
-        ? error.message
-        : 'Invalid expression'
-    )
+    throw new Error(error instanceof Error ? error.message : 'Invalid expression')
   }
 
   if (typeof result === 'number') {
@@ -117,9 +102,7 @@ export function evaluateExpression(input: string, mode: AngleMode): string {
       return '0'
     }
 
-    return math.format(result, {
-      precision: 14,
-    })
+    return math.format(result, { precision: 14 })
   }
 
   if (Array.isArray(result)) {
