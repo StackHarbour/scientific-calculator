@@ -99,7 +99,7 @@ function App() {
     if (key === '!') return append('!')
     if (key === '1/x') return setExpression(v => `1/(${v})`)
     if (key === '10ˣ') return append('10^')
-    if (['sin','cos','tan','log','ln','asin','acos','atan','sinh','cosh','tanh','abs','floor','ceil'].includes(key)) return append(`${key}(`)
+    if (['sin', 'cos', 'tan', 'log', 'ln', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'floor', 'ceil'].includes(key)) return append(`${key}(`)
     append(key)
   }
 
@@ -132,7 +132,7 @@ function App() {
         <section className="min-w-0">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-1 rounded-lg border border-zinc-200 bg-white p-1 dark:border-zinc-800 dark:bg-zinc-900">
-              {(['DEG','RAD','GRAD'] as AngleMode[]).map(m => (
+              {(['DEG', 'RAD', 'GRAD'] as AngleMode[]).map(m => (
                 <button key={m} onClick={() => setMode(m)} className={`rounded-md px-3 py-1.5 text-xs font-medium ${mode === m ? 'bg-zinc-950 text-white dark:bg-white dark:text-zinc-950' : 'text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}>{m}</button>
               ))}
             </div>
@@ -156,7 +156,7 @@ function App() {
 
             <div className="p-3 sm:p-4">
               <div className="mb-3 grid grid-cols-4 gap-2">
-                {['MC','MR','M+','M−'].map(k => (
+                {['MC', 'MR', 'M+', 'M−'].map(k => (
                   <button key={k} onClick={() => {
                     const v = memoryValue()
                     if (k === 'MC') setMemory(0)
@@ -177,12 +177,11 @@ function App() {
 
               <div className="grid grid-cols-5 gap-2">
                 {keyRows.flat().map((key, i) => key === '' ? <div key={i} /> : (
-                  <button key={`${key}-${i}`} onClick={() => press(key)} className={`min-h-12 rounded-xl border text-sm font-medium transition active:scale-[.98] ${
-                    key === '=' ? 'border-zinc-950 bg-zinc-950 text-white hover:bg-zinc-800 dark:border-white dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200' :
-                    ['÷','×','−','+'].includes(key) ? 'border-zinc-200 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white' :
-                    ['AC','⌫'].includes(key) ? 'border-zinc-200 bg-white text-red-500 hover:bg-red-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-red-950/30' :
-                    'border-zinc-200 bg-white hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800'
-                  }`}>{key}</button>
+                  <button key={`${key}-${i}`} onClick={() => press(key)} className={`min-h-12 rounded-xl border text-sm font-medium transition active:scale-[.98] ${key === '=' ? 'border-zinc-950 bg-zinc-950 text-white hover:bg-zinc-800 dark:border-white dark:bg-white dark:text-zinc-950 dark:hover:bg-zinc-200' :
+                    ['÷', '×', '−', '+'].includes(key) ? 'border-zinc-200 bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white' :
+                      ['AC', '⌫'].includes(key) ? 'border-zinc-200 bg-white text-red-500 hover:bg-red-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-red-950/30' :
+                        'border-zinc-200 bg-white hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800'
+                    }`}>{key}</button>
                 ))}
               </div>
             </div>
