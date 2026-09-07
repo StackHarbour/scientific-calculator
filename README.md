@@ -1,34 +1,36 @@
 # Scientific Calculator
 
-A single-page React + TypeScript scientific calculator designed for accuracy, usability, and deployment as a static Vite application.
+Production-oriented scientific calculator built with **Next.js 16 App Router**, React 19, TypeScript, Tailwind CSS 4, math.js, and Vitest 5.
 
-## Stack
+## What is included
 
-- React 19
-- TypeScript
-- Vite
-- Tailwind CSS 4
-- math.js
-- Lucide React
+- Scientific calculator with DEG/RAD/GRAD modes
+- Fractions, scientific notation, powers, roots, logarithms, trigonometry, factorials, combinations and permutations
+- Keyboard input, paste support, memory, history, copy result, light/dark mode
+- Dedicated calculator pages for common search intents
+- Mathematics guides with practical explanations
+- Metadata, canonical URLs, Open Graph/Twitter metadata, JSON-LD, sitemap, robots.txt, manifest, breadcrumbs, and 404 page
+- Automated calculator-engine tests
+- Responsive and accessible controls
 
 ## Development
+
+Requires Node.js 22.12+.
 
 ```bash
 npm install
 npm run dev
-```
-
-## Production build
-
-```bash
+npm run typecheck
+npm run test
 npm run build
-npm run preview
 ```
 
-## Deploy to Vercel
+For PowerShell environments where `npm.ps1` is blocked, use `npm.cmd` instead.
 
-Import the repository into Vercel. The project is a standard Vite application; Vercel will detect the build configuration automatically.
+## Production URL
 
-## Notes
+Set `NEXT_PUBLIC_SITE_URL` in Vercel to the canonical production origin, for example:
 
-The calculation engine uses `mathjs` rather than JavaScript `eval()`. Trigonometric functions respect the selected DEG/RAD/GRAD mode.
+`https://your-domain.com`
+
+This value is used by canonical URLs, Open Graph metadata, sitemap, robots.txt, and JSON-LD.

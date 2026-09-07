@@ -1,0 +1,4 @@
+import type { Metadata } from 'next'
+import { Breadcrumbs } from '@/components/Breadcrumbs'
+export const metadata: Metadata = { title:'Contact', description:'Contact Scientific Calculator about bugs, accessibility issues, suggestions, or general questions.', alternates:{canonical:'/contact'} }
+export default function Page(){return <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14"><Breadcrumbs items={[{name:'Home',href:'/'},{name:'Contact'}]}/><h1 className="text-3xl font-bold tracking-tight">Contact</h1><div className="prose-calculator mt-8"><p>Found a calculation bug, accessibility problem, broken link, or useful feature that should be added? Send the project owner a message through the contact channel associated with this deployment.</p><p>If you are reporting a calculation issue, include the exact expression, angle mode, expected result, and actual result. That makes numerical bugs much easier to reproduce.</p></div></div>}

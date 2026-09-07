@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.vscode/
+*.log
+.env*
+!.env.example
+.vercel/
+coverage/
+.vitest/
+.DS_Store

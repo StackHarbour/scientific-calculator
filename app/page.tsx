@@ -1,0 +1,15 @@
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { ScientificCalculator } from '@/components/ScientificCalculator'
+import { calculatorPages, guidePages, siteConfig } from '@/lib/site'
+import { websiteJsonLd, softwareJsonLd } from '@/lib/seo'
+
+export const metadata: Metadata = { title: 'Scientific Calculator Online', description: 'Use a free scientific calculator online for trigonometry, logarithms, exponents, roots, fractions, percentages, and scientific notation.', alternates: { canonical: '/' } }
+
+export default function Home(){return <>
+<section className="border-b border-zinc-200 bg-gradient-to-b from-white to-zinc-50 dark:border-zinc-800 dark:from-zinc-950 dark:to-zinc-950"><div className="mx-auto max-w-6xl px-4 pb-10 pt-10 sm:px-6 sm:pb-14"><div className="max-w-3xl"><p className="text-sm font-semibold text-zinc-500">Free online math tools</p><h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">Scientific calculator built for real calculations.</h1><p className="mt-5 text-lg leading-8 text-zinc-600 dark:text-zinc-400">Calculate fractions, powers, roots, trigonometry, logarithms, percentages, and scientific notation directly in your browser. No account and no server-side calculation required.</p></div></div></section>
+<section className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10"><ScientificCalculator/></section>
+<section className="mx-auto max-w-6xl px-4 py-10 sm:px-6"><div className="grid gap-4 md:grid-cols-2"><div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"><h2 className="text-xl font-semibold">Popular calculators</h2><div className="mt-4 grid gap-2 sm:grid-cols-2">{calculatorPages.slice(0,6).map(p=><Link key={p.href} href={p.href} className="rounded-lg p-3 hover:bg-zinc-100 dark:hover:bg-zinc-800"><div className="font-medium">{p.name}</div><div className="mt-1 text-sm text-zinc-500">{p.description}</div></Link>)}</div></div><div className="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"><h2 className="text-xl font-semibold">Math guides</h2><div className="mt-4 grid gap-2">{guidePages.map(p=><Link key={p.href} href={p.href} className="rounded-lg p-3 hover:bg-zinc-100 dark:hover:bg-zinc-800"><div className="font-medium">{p.name}</div><div className="mt-1 text-sm text-zinc-500">{p.description}</div></Link>)}</div></div></div></section>
+<section className="mx-auto max-w-4xl px-4 pb-14 sm:px-6"><h2 className="text-2xl font-semibold">Why use this scientific calculator?</h2><div className="prose-calculator"><p>The calculator is designed for quick browser-based work while still supporting the notation used in science, engineering, school mathematics, and everyday calculations. Expressions can be typed or pasted, including fractions such as <code>3/8</code> and scientific notation such as <code>6.022e23</code>.</p><p>Calculations run locally in the browser. Your expressions do not need to be sent to a calculation server, which keeps the basic tool fast and private.</p></div></section>
+{websiteJsonLd()}{softwareJsonLd(siteConfig.name,siteConfig.description,siteConfig.url)}
+</>}
